@@ -40,8 +40,9 @@ keyboard.getPressedKeys(); // keys that got pressed between this frame and the l
 keyboard.getReleasedKeys(); // keys that got released between this frame and the last frame
 keyboard.getHeldKeys(); // keys that the user is currently holding down
 
-// key is https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code
-keyboard.isPressed(key); // Returns true if key got pressed between this frame and the last frame
-keyboard.isReleased(key); // Returns true if key got released between this frame and the last frame
-keyboard.isHeld(key); // Returns true if key is being held down this frame
+// code is https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code
+// code values: https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code/code_values
+keyboard.isPressed(code); // Returns true if key got pressed between this frame and the last frame
+keyboard.isReleased(code); // Returns true if key got released between this frame and the last frame
+keyboard.isHeld(code); // Returns true if key is being held down this frame
 ```
