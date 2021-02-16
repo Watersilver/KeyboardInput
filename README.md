@@ -35,7 +35,8 @@ keyboard.destroy();
 Finally to query state
 
 ```javascript
-// following methods returns Set (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set)
+// following methods returns Set
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set
 keyboard.getPressedKeys(); // keys that got pressed between this frame and the last frame
 keyboard.getReleasedKeys(); // keys that got released between this frame and the last frame
 keyboard.getHeldKeys(); // keys that the user is currently holding down
