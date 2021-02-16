@@ -35,12 +35,12 @@ keyboard.destroy();
 Finally to query state
 
 ```javascript
-  getPressedKeys() // Returns set of keys that got pressed between this frame and the last frame
-  getReleasedKeys() // Returns set of keys that got released between this frame and the last frame
-  getHeldKeys() // Returns set of keys that the user is currently holding down
+  keyboard.getPressedKeys(); // Returns set of keys that got pressed between this frame and the last frame
+  keyboard.getReleasedKeys(); // Returns set of keys that got released between this frame and the last frame
+  keyboard.getHeldKeys(); // Returns set of keys that the user is currently holding down
 
   // key is https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code
-  isPressed(key) // Returns true if key got pressed between this frame and the last frame
-  isReleased(key) // Returns true if key got released between this frame and the last frame
-  isHeld(key) // Returns if key is being held down this frame
+  keyboard.isPressed(key); // Returns true if key got pressed between this frame and the last frame
+  keyboard.isReleased(key); // Returns true if key got released between this frame and the last frame
+  keyboard.isHeld(key); // Returns if key is being held down this frame
 ```
