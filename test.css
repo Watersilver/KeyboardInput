@@ -1,0 +1,23 @@
+body {
+  margin: 0;
+}
+
+main {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  text-align: center;
+  width: 100vw;
+  height: 100vh;
+}
+
+main>*:nth-child(1) {
+  background-color: #fab;
+}
+
+main>*:nth-child(2) {
+  background-color: #caf;
+}
+
+main>*:nth-child(3) {
+  background-color: #abc;
+}

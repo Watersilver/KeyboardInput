@@ -1,5 +1,56 @@
+// Tab loses focus, so it can never be detected. Warn against use.
+
+// If I release fn mid key-press, kb will think they are held
+const fnProblemKeys = new Set([
+  "VolumeDown",
+  "VolumeUp",
+  "AudioVolumeUp",
+  "AudioVolumeDown"
+]);
+for (let i = 1; i < 25; i++) {
+  fnProblemKeys.add("F"+i);
+}
+
+// Key up fires immediatelly after keydown for the following
+const releaseProblemKeys = new Set([
+  "VolumeMute",
+  "AudioVolumeMute",
+  "MediaTrackPrevious",
+  "MediaPlayPause",
+  "MediaTrackNext"
+]);
+
+const miscUnstableKeys = new Set([
+  "",
+  // "Pause", // Look into pause // Probs safe
+  // "ScrollLock", // I think it's safe
+  "PrintScreen",
+  "Unidentified",
+  "OSLeft",
+  "MetaLeft",
+  "OSRight",
+  "MetaRight",
+  "Power",
+  "BrowserSearch",
+  "BrowserFavorites",
+  "BrowserRefresh",
+  "BrowserStop",
+  "BrowserForward",
+  "BrowserBack",
+  "LaunchMail",
+  "LaunchMediaPlayer",
+  "MediaSelect"
+]);
+for (let i = 1; i < 3; i++) {
+  miscUnstableKeys.add("LaunchApp"+i)
+}
+
+const ignoreKeys = new Set([...releaseProblemKeys, ...miscUnstableKeys]);
+const dontHoldKeys = new Set(fnProblemKeys);
+
 class Keyboard {
   constructor() {
+    this._prevDef = true;
     this._loopInternally = false;
     this._updatedForThisFrame = false;
     this._pendingHeldKeys = new Set();
@@ -13,10 +64,14 @@ class Keyboard {
     this._intervalID = setInterval(() => this._internalLoop());
     this._listeners = {
       keydown: e => {
+        if (this._prevDef) e.preventDefault();
+        if (ignoreKeys.has(e.code)) return;
         this._pendingHeldKeys.add(e.code);
+        if (e.code === "TAB") console.log("Dmn")
       },
 
       keyup: e => {
+        if (ignoreKeys.has(e.code) || dontHoldKeys.has(e.code)) return;
         this._pendingReleasedKeys.add(e.code);
       },
 
@@ -30,6 +85,10 @@ class Keyboard {
     for (const [type, callback] of Object.entries(this._listeners)) {
       document.addEventListener(type, callback);
     }
+  }
+
+  preventDefaults(bool) {
+    this._prevDef = bool;
   }
 
   _internalLoop() {
@@ -70,7 +129,7 @@ class Keyboard {
     for (const key of this._pendingHeldKeys) {
       if (!this._heldKeys.has(key)) {
         this._pressedKeys.add(key);
-        this._heldKeys.add(key);
+        if (!dontHoldKeys.has(key)) this._heldKeys.add(key);
       }
     }
     this._pendingHeldKeys.clear();

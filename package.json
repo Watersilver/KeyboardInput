@@ -1,0 +1,16 @@
+{
+  "name": "keyboardinput",
+  "version": "1.0.0",
+  "repository": "https://github.com/Watersilver/KeyboardInput.git",
+  "author": "Ermis thinkpad <cydisalt@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "test": "parcel test.html"
+  },
+  "devDependencies": {
+    "parcel": "^1.12.4"
+  },
+  "browserslist": [
+    "last 1 Chrome version"
+  ]
+}
