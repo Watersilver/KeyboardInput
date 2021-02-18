@@ -67,7 +67,6 @@ class Keyboard {
         if (this._prevDef) e.preventDefault();
         if (ignoreKeys.has(e.code)) return;
         this._pendingHeldKeys.add(e.code);
-        if (e.code === "TAB") console.log("Dmn")
       },
 
       keyup: e => {
