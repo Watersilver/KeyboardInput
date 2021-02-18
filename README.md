@@ -19,13 +19,6 @@ function someLoopingFunction(args) {
 }
 ```
 
-or if you don't have looping function and you want it to update internally use these methods
-
-```javascript
-keyboard.startInternalLoop();
-keyboard.stopInternalLoop();
-```
-
 To destroy it
 
 ```javascript

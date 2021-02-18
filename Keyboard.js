@@ -1,5 +1,3 @@
-// Tab loses focus, so it can never be detected. Warn against use.
-
 // If I release fn mid key-press, kb will think they are held
 const fnProblemKeys = new Set([
   "VolumeDown",
@@ -49,19 +47,38 @@ const ignoreKeys = new Set([...releaseProblemKeys, ...miscUnstableKeys]);
 const dontHoldKeys = new Set(fnProblemKeys);
 
 class Keyboard {
+
+  static _undetectableKeys;
+  static _pressOnlyKeys;
+  static _allProblemKeys;
+
+  static get undetectableKeys() {
+    if (!Keyboard._undetectableKeys) Keyboard._undetectableKeys = new Set(ignoreKeys);
+    return Keyboard._undetectableKeys;
+  }
+  static get pressOnlyKeys() {
+    if (!Keyboard._pressOnlyKeys) Keyboard._pressOnlyKeys = new Set(dontHoldKeys);
+    return Keyboard._pressOnlyKeys;
+  }
+  static get allProblemKeys() {
+    if (!Keyboard._allProblemKeys) Keyboard._allProblemKeys = new Set([...ignoreKeys, ...dontHoldKeys]);
+    return Keyboard._allProblemKeys;
+  }
+
   constructor() {
     this._prevDef = true;
-    this._loopInternally = false;
-    this._updatedForThisFrame = false;
     this._pendingHeldKeys = new Set();
     this._pendingReleasedKeys = new Set();
     // held keys could be a map (key: timestamp)
     // but that would be unable to detect keypresses
     // that lasted less than update interval.
+    // I need a separate heldKeys set because it's
+    // possible to press and release a key before
+    // it can be held by pressing and releasing
+    // before update runs
     this._pressedKeys = new Set();
     this._releasedKeys = new Set();
     this._heldKeys = new Set();
-    this._intervalID = setInterval(() => this._internalLoop());
     this._listeners = {
       keydown: e => {
         if (this._prevDef) e.preventDefault();
@@ -90,11 +107,6 @@ class Keyboard {
     this._prevDef = bool;
   }
 
-  _internalLoop() {
-    this._updatedForThisFrame = false;
-    if (this._loopInternally) this.update();
-  }
-
   getPressedKeys() {
     return new Set(this._pressedKeys);
   }
@@ -120,8 +132,6 @@ class Keyboard {
   }
 
   update() {
-    if (this._updatedForThisFrame) throw Error("Can only call update once per frame.")
-
     this._pressedKeys.clear();
     this._releasedKeys.clear();
 
@@ -140,23 +150,12 @@ class Keyboard {
       }
     }
     this._pendingReleasedKeys.clear();
-
-    this._updatedForThisFrame = true;
-  }
-
-  startInternalLoop() {
-    this._loopInternally = true;
-  }
-
-  stopInternalLoop() {
-    this._loopInternally = false;
   }
 
   destroy() {
     for (const [type, callback] of Object.entries(this._listeners)) {
       document.removeEventListener(type, callback);
     }
-    clearInterval(this._intervalID);
   }
 }
 
