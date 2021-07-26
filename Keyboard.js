@@ -65,8 +65,8 @@ class Keyboard {
     return Keyboard._allProblemKeys;
   }
 
-  constructor() {
-    this._prevDef = true;
+  constructor(preventDefault = {}) {
+    this._prevDef = preventDefault;
     this._pendingHeldKeys = new Set();
     this._pendingReleasedKeys = new Set();
     // held keys could be a map (key: timestamp)
@@ -81,7 +81,7 @@ class Keyboard {
     this._heldKeys = new Set();
     this._listeners = {
       keydown: e => {
-        if (this._prevDef) e.preventDefault();
+        if (this._prevDef[e.code] === true) e.preventDefault();
         if (ignoreKeys.has(e.code)) return;
         this._pendingHeldKeys.add(e.code);
       },

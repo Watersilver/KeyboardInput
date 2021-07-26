@@ -7,7 +7,13 @@ Object that knows key states.
 ```javascript
 import Keyboard from "./path/to/Keyboard.js";
 
-const keyboard = new Keyboard();
+// The preventDefault object calls e.preventDefault() for keys that are true
+// will also work if mutated even after a Keyboard instance starts using it
+// a key code is https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code
+// code values: https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code/code_values
+let preventDefault = {"F5": true, /* [code]: true */};
+
+const keyboard = new Keyboard(preventDefault);
 ```
 
 To update state do this
@@ -34,8 +40,7 @@ keyboard.getPressedKeys(); // keys that got pressed between this frame and the l
 keyboard.getReleasedKeys(); // keys that got released between this frame and the last frame
 keyboard.getHeldKeys(); // keys that the user is currently holding down
 
-// code is https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code
-// code values: https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code/code_values
+
 keyboard.isPressed(code); // Returns true if key got pressed between this frame and the last frame
 keyboard.isReleased(code); // Returns true if key got released between this frame and the last frame
 keyboard.isHeld(code); // Returns true if key is being held down this frame
